@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.demo02.dao.UserMapper">
+    <resultMap id="userMap" type="org.demo02.entity.User">
+        <id property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="email" column="email"/>
+        <result property="phone" column="phone"/>
+        <result property="realName" column="real_name"/>
+        <result property="idCard" column="id_card"/>
+        <result property="role" column="role"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="org.demo02.entity.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO user (username, password, email, phone, real_name, id_card, role, status, create_time, update_time)
+        VALUES (#{username}, #{password}, #{email}, #{phone}, #{realName}, #{idCard}, #{role}, #{status}, #{createTime}, #{updateTime})
+    </insert>
+
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM user WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="org.demo02.entity.User">
+        UPDATE user
+        SET username = #{username},
+            password = #{password},
+            email = #{email},
+            phone = #{phone},
+            real_name = #{realName},
+            id_card = #{idCard},
+            role = #{role},
+            status = #{status},
+            update_time = #{updateTime}
+        WHERE id = #{id}
+    </update>
+
+    <select id="findById" parameterType="long" resultMap="userMap">
+        SELECT * FROM user WHERE id = #{id}
+    </select>
+
+    <select id="findByUsername" parameterType="string" resultMap="userMap">
+        SELECT * FROM user WHERE username = #{username}
+    </select>
+
+    <select id="findByEmail" parameterType="string" resultMap="userMap">
+        SELECT * FROM user WHERE email = #{email}
+    </select>
+
+    <select id="findByPhone" parameterType="string" resultMap="userMap">
+        SELECT * FROM user WHERE phone = #{phone}
+    </select>
+
+    <select id="findAll" resultMap="userMap">
+        SELECT * FROM user ORDER BY id ASC
+    </select>
+
+    <select id="findByPage" resultMap="userMap">
+        SELECT * FROM user ORDER BY id ASC LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="findByRole" parameterType="string" resultMap="userMap">
+        SELECT * FROM user WHERE role = #{role} ORDER BY id ASC
+    </select>
+
+    <select id="findByStatus" parameterType="string" resultMap="userMap">
+        SELECT * FROM user WHERE status = #{status} ORDER BY id ASC
+    </select>
+
+    <select id="countTotal" resultType="int">
+        SELECT COUNT(*) FROM user
+    </select>
+
+    <select id="findByCondition" resultMap="userMap">
+        SELECT * FROM user
+        <where>
+            <if test="username != null and username != ''">
+                AND username LIKE CONCAT('%', #{username}, '%')
+            </if>
+            <if test="email != null and email != ''">
+                AND email = #{email}
+            </if>
+            <if test="phone != null and phone != ''">
+                AND phone = #{phone}
+            </if>
+            <if test="role != null and role != ''">
+                AND role = #{role}
+            </if>
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+        </where>
+        ORDER BY id ASC
+    </select>
+</mapper> 

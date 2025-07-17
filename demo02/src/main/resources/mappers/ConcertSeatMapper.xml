@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.demo02.dao.ConcertSeatMapper">
+    <resultMap id="concertSeatMap" type="org.demo02.entity.ConcertSeat">
+        <id property="id" column="id"/>
+        <result property="concertId" column="concert_id"/>
+        <result property="seatId" column="seat_id"/>
+        <result property="status" column="status"/>
+        <result property="rowNum" column="row_num"/>
+        <result property="col" column="col"/>
+        <result property="seatNo" column="seat_no"/>
+    </resultMap>
+
+    <!-- 单条插入 -->
+    <insert id="insert" parameterType="org.demo02.entity.ConcertSeat" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO concert_seat (concert_id, seat_id, status)
+        VALUES (#{concertId}, #{seatId}, #{status})
+    </insert>
+
+    <!-- 批量插入 -->
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO concert_seat (concert_id, seat_id, status)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.concertId}, #{item.seatId}, #{item.status})
+        </foreach>
+    </insert>
+
+    <!-- 更新座位状态 -->
+    <update id="updateStatus">
+        UPDATE concert_seat
+        SET status = #{status}
+        WHERE concert_id = #{concertId} AND seat_id = #{seatId}
+    </update>
+
+    <!-- 按演唱会ID和座位ID查询 -->
+    <select id="findByConcertAndSeat" resultMap="concertSeatMap">
+        SELECT * FROM concert_seat
+        WHERE concert_id = #{concertId} AND seat_id = #{seatId}
+    </select>
+
+    <!-- 按演唱会ID查询所有座位 -->
+    <select id="findByConcertId" resultMap="concertSeatMap">
+        SELECT * FROM concert_seat
+        WHERE concert_id = #{concertId}
+        ORDER BY seat_id ASC
+    </select>
+
+    <select id="getSeatsByConcert" resultMap="concertSeatMap">
+        SELECT * FROM concert_seat
+        WHERE concert_id = #{concertId}
+    </select>
+</mapper> 

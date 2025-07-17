@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.demo02.dao.AnnouncementMapper">
+    <select id="findAll" resultType="org.demo02.entity.Announcement">
+        SELECT * FROM announcement ORDER BY publish_time DESC
+    </select>
+
+    <select id="findByPage" resultType="org.demo02.entity.Announcement">
+        SELECT * FROM announcement ORDER BY id ASC LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="findByPageWithCondition" resultType="org.demo02.entity.Announcement">
+        SELECT * FROM announcement
+        <where>
+            <if test="title != null and title != ''">
+                AND title LIKE CONCAT('%', #{title}, '%')
+            </if>
+            <if test="type != null and type != ''">
+                AND type = #{type}
+            </if>
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+            <if test="priority != null and priority != ''">
+                AND priority = #{priority}
+            </if>
+            <if test="author != null and author != ''">
+                AND author LIKE CONCAT('%', #{author}, '%')
+            </if>
+        </where>
+        ORDER BY id ASC LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="countTotal" resultType="int">
+        SELECT COUNT(*) FROM announcement
+    </select>
+
+    <select id="countByCondition" resultType="int">
+        SELECT COUNT(*) FROM announcement
+        <where>
+            <if test="title != null and title != ''">
+                AND title LIKE CONCAT('%', #{title}, '%')
+            </if>
+            <if test="type != null and type != ''">
+                AND type = #{type}
+            </if>
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+            <if test="priority != null and priority != ''">
+                AND priority = #{priority}
+            </if>
+            <if test="author != null and author != ''">
+                AND author LIKE CONCAT('%', #{author}, '%')
+            </if>
+        </where>
+    </select>
+</mapper> 

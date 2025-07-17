@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.demo02.dao.FeedbackMapper">
+<insert id="insertFeedback" parameterType="org.demo02.entity.Feedback">
+    INSERT INTO feedback (user_id, content, contact, status, create_time, update_time)
+    VALUES (#{userId}, #{content}, #{contact}, #{status}, NOW(), NOW())
+</insert>
+<select id="selectFeedbackById" resultType="org.demo02.entity.Feedback">
+    SELECT * FROM feedback WHERE id = #{id}
+</select>
+<select id="selectFeedbackList" resultType="org.demo02.entity.Feedback">
+    SELECT * FROM feedback
+    <where>
+        <if test="userId != null">AND user_id = #{userId}</if>
+        <if test="status != null">AND status = #{status}</if>
+    </where>
+    ORDER BY create_time DESC
+</select>
+<update id="updateFeedbackStatus">
+    UPDATE feedback SET status = #{status}, update_time = NOW() WHERE id = #{id}
+</update>
+<update id="updateFeedbackReply">
+    UPDATE feedback SET reply = #{reply}, status = 'REPLIED', update_time = NOW() WHERE id = #{id}
+</update>
+</mapper>

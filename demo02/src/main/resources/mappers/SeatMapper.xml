@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.demo02.dao.SeatMapper">
+    <resultMap id="seatMap" type="org.demo02.entity.Seat">
+        <id property="id" column="id"/>
+        <result property="venueId" column="venue_id"/>
+        <result property="rowNum" column="row_num"/>
+        <result property="col" column="col"/>
+        <result property="seatNo" column="seat_no"/>
+    </resultMap>
+
+    <select id="findByVenueId" parameterType="long" resultMap="seatMap">
+        SELECT * FROM seat WHERE venue_id = #{venueId} ORDER BY row_num, col
+    </select>
+
+    <select id="findById" parameterType="long" resultMap="seatMap">
+        SELECT * FROM seat WHERE id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="org.demo02.entity.Seat" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO seat (venue_id, row_num, col, seat_no)
+        VALUES (#{venueId}, #{rowNum}, #{col}, #{seatNo})
+    </insert>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO seat (venue_id, row_num, col, seat_no)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.venueId}, #{item.rowNum}, #{item.col}, #{item.seatNo})
+        </foreach>
+    </insert>
+</mapper> 

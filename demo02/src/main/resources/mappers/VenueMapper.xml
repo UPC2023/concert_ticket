@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.demo02.dao.VenueMapper">
+    <resultMap id="venueMap" type="org.demo02.entity.Venue">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="address" column="address"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="org.demo02.entity.Venue" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO venue (name, address) VALUES (#{name}, #{address})
+    </insert>
+
+    <update id="update" parameterType="org.demo02.entity.Venue">
+        UPDATE venue SET name = #{name}, address = #{address} WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM venue WHERE id = #{id}
+    </delete>
+
+    <select id="findById" parameterType="long" resultMap="venueMap">
+        SELECT * FROM venue WHERE id = #{id}
+    </select>
+
+    <select id="findAll" resultMap="venueMap">
+        SELECT * FROM venue ORDER BY id ASC
+    </select>
+</mapper> 
